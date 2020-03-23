@@ -1,0 +1,338 @@
+<app-navbar></app-navbar>
+<br /><br />
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+
+<div class="container">
+  <h3 class="left">Questions</h3>
+  
+  <div class="right">
+    <button type="button" class="btn btn-info" (click)="getDeactivatedQuestions()"
+      title="Click to view deactivated Questions">View Deactivated Questions</button>&nbsp;
+    <span class="dropdown">
+      <button class="btn btn-info dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown"
+        aria-haspopup="true" aria-expanded="false">
+        Options
+      </button>
+      <div class="dropdown-menu" aria-labelledby="dropdownMenu2">
+        <button class="dropdown-item hover" (click)="deleteQuestion()">Delete Questions</button>
+        <button class="dropdown-item hover" (click)="deactivateQuestion()">Deactivate Questions</button>
+      </div>
+    </span>&nbsp;
+    <button type="button" class="btn btn-info" (click)="add()" title="Click to Create New Questions">Create New</button>
+  </div><br /><br />
+  <hr />
+  
+    <div class="alert alert-info alert-dismissible fade show color" *ngIf="deactivateSuccessMessageFlag">
+        <strong >Success!<span aria-expanded="false" class="test">Question Deactivated Successfully.!</span></strong>
+        <button type="button" class="close" data-dismiss="alert">&times;</button>
+    </div>
+    <div class="alert alert-danger alert-dismissible fade show warningcolor" *ngIf="deactivateFailureMessageFlag">
+      <strong >Error!<span aria-expanded="false" class="test">Question Deactivation Failed.!</span></strong>
+      <button type="button" class="close" data-dismiss="alert">&times;</button>
+  </div>
+  <div class="alert alert-info alert-dismissible fade show color" *ngIf="deleteSuccessMessageFlag">
+    <strong >Success!<span aria-expanded="false" class="test">Question Deleted Successfully.!</span></strong>
+    <button type="button" class="close" data-dismiss="alert">&times;</button>
+</div>
+<div class="alert alert-danger alert-dismissible fade show warningcolor" *ngIf="deleteFailureMessageFlag">
+  <strong >Error!<span aria-expanded="false" class="test">Question Deletion Failed.!</span></strong>
+  <button type="button" class="close" data-dismiss="alert">&times;</button>
+</div>
+
+ 
+  <h4 class="color">Active Questions</h4>
+  <br />
+  <div class="row">
+    <div class="col-4 ">
+      <span>
+        Display
+        <select id="records"  (change)="selectPageChangeHandler($event)"
+          title="Click to Limit the Number of records">
+          <option value="10" selected>10</option>
+          <option value="20">20</option>
+          <option value="50">50</option>
+        </select>
+        records
+      </span>
+    </div>
+    <div class="col-2">
+      <nav>
+        <ul class="pagination">
+          <li class="page-item">
+            <a class="page-link" href="#" aria-label="Previous">
+              <span aria-hidden="true" class="color">&laquo;</span>
+              <span class="sr-only">Previous</span>
+            </a>
+          </li>
+          <li *ngFor="let page of counter(totalPages); let i=index" class="page-item">
+
+            <a class="page-link color" (click)="onSelectPage(i)" href="#">{{i+1}}</a>
+
+          </li>
+          <li class="page-item">
+            <a class="page-link" href="#" aria-label="Next">
+              <span aria-hidden="true" class="color">&raquo;</span>
+              <span class="sr-only">Next</span>
+            </a>
+          </li>
+        </ul>
+      </nav>
+      <!-- <nav>
+      <ul class="pagination">
+        <li class="page-item" *ngFor="let page of counter(totalPages); let i=index">
+          <a href="">
+            {{page}}
+          </a>
+        </li>
+      </ul>
+    </nav> -->
+    </div>
+  </div>
+  <span class="align">
+
+    <i class="fa fa-refresh" aria-hidden="true">&nbsp;<a href="" title="Reset all filters to default"
+        class="color">Reset</a></i>
+  </span><br /><br />
+  <nav class="navbar right">
+    <input #tag (keyup.enter)="onEnter(tag.value)" placeholder="&#xF002; Search" class="form-control mr-sm-2 "
+      style="font-family:Arial, FontAwesome" title="Search based on Tags" />
+
+
+
+  </nav>
+  <br /><br /><br />
+  <div ng-app="">
+    <table class="table shadow table shadow-lg p-3 mb-5 bg-white rounded">
+      <thead class="thead-info color">
+        <tr class="header">
+          <th><input type='checkbox' [(ngModel)]="masterSelected" name="list_name" value="m1"
+              (change)="checkUncheckAll()" />
+          </th>
+          <th>S.No.</th>
+          <th>Question</th>
+          <th>Question Type</th>
+          <th>Tags</th>
+          <th>Category</th>
+          <th>Level</th>
+          <th>Actions</th>
+
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let active of activeQuestions; let i=index">
+          <th>
+            <div class="form-check form-check-inline"><input type="checkbox" [(ngModel)]="active.isSelected"
+                name="list_name" value="{{active.id}}" (change)="isAllSelected()">
+            </div>
+          </th>
+           <th>{{(selectedRecords * ((pageNo+1)-1))+i+1}}</th> 
+          <td><a href="" class="link" data-toggle="modal" data-target="#exampleModalLong"
+              (click)="getDetails(active.id)" title="Click to view Question Details">{{active?.title}}</a></td>
+          <td>{{active?.type_Id?.name}}</td>
+          <td>{{active?.tags}}</td>
+          <td>{{active?.category_Id?.name}}</td>
+          <td>{{active?.level_Id?.name}}</td>
+          <td><i class="fa fa-pencil edit" aria-hidden="true" title="Click to edit Question Details" (click)="editQuestion(active.id)"></i>&nbsp;<i
+              class="fa fa-arrow-circle-down deactivate" (click)="deactivateThisQuestion(active.id)"
+              title="Click to deactivate this Question"></i>&nbsp;<i class="fa fa-trash-o delete"
+              (click)="deleteThisQuestion(active.id)" title="Click to delete this Question"></i></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModalLong" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle"
+  aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title color" id="exampleModalLongTitle"><div align="center">Question View</div></h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="container">
+          <div class="row">
+            <label class="col-4 color"><h6>Question Type</h6></label>
+            <div class="col-7">
+              {{questionDetails?.type_Id?.name}}
+            </div>
+          </div>
+          <div class="row">
+            <label class="col-4 color"><h6>Title</h6></label>
+            <div class="col-6">
+              {{questionDetails?.title}}
+            </div>
+          </div>
+          <div class="row">
+            <label class="col-4 color"><h6>Category</h6></label>
+            <div class="col-6">
+              {{questionDetails?.category_Id?.name}}
+            </div>
+          </div>
+          <div class="row">
+            <label class="col-4 color"><h6>Level</h6></label>
+            <div class="col-6">
+              {{questionDetails?.level_Id?.name}}
+            </div>
+          </div>
+          <div class="row">
+            <label class="col-4 color"><h6>Duration</h6></label>
+            <div class="col-6">
+              {{questionDetails?.duration}}
+            </div>
+          </div>
+          <div class="row">
+            <label class="col-4 color"><h6>Skill Points</h6></label>
+            <div class="col-6">
+              {{questionDetails?.skill_points}}
+            </div>
+          </div>
+          <div class="row">
+            <label class="col-4 color"><h6>Score</h6></label>
+            <div class="col-6">
+              {{questionDetails?.score}}
+            </div>
+          </div>
+          <div class="row">
+            <label class="col-4 color"><h6>Tags</h6></label>
+            <div class="col-6">
+              {{questionDetails?.tags}}
+            </div>
+          </div>
+          <div *ngIf="questionDetails?.type_Id?.id!=5" class="row">
+            <label class="col-4 color"> <h6>Answer</h6></label>
+            <div class="col-6">
+              {{option?.answer}}
+            </div><br />
+          </div>
+          <div *ngIf="questionDetails?.type_Id?.id==6" class="row">
+            <label class="col-4 color"> <h6>Correct Explanation</h6></label>
+            <div class="col-6">
+              {{option?.correctExplanation}}
+            </div><br />
+            <label class="col-4 color"> <h6>Wrong Explanation</h6></label>
+            <div class="col-6">
+              {{option?.wrongExplanation}}
+            </div><br />
+          </div>
+          <div *ngIf="questionDetails?.type_Id?.id==2">
+           
+            <div class="row">
+              <label class="col-4 color"> <h6>Correct Explanation</h6></label>
+              <div class="col-6">
+                {{option?.cExplanation}}
+              </div>
+            </div>
+            <div class="row">
+              <label class="col-4 color"> <h6>Wrong Explanation</h6></label>
+              <div class="col-6">
+                {{option?.fExplanation}}
+              </div>
+            </div>
+
+          </div>
+        </div>
+        <div *ngIf="questionDetails?.type_Id?.id==5">
+          <div class="container">
+            <div class="row">
+              <div class="col color">
+                <h6>Match</h6>
+              </div>
+              <div class="col">
+               <strong class="color">Column A</strong><br/>
+              <div *ngFor="let col_a of matchDetails">
+                <div style="margin-left: 10px;">{{col_a.col_a}}</div><hr/>
+              </div>
+
+              </div>
+              <div class="col">
+                <strong class="color">Column B</strong><br/>
+                <div *ngFor="let col_b of matchDetails">
+                  <div style="margin-left: 12px;">{{col_b.col_b}}</div><hr/>
+                </div>
+              </div>
+            </div>
+          </div>
+      </div>
+
+
+
+
+      <div *ngIf="questionDetails?.type_Id?.id==1">
+        <div class="container">
+          <div class="row">
+            <div class="col color">
+              <h6>Best Choice</h6>
+            </div>
+            <div class="col">
+             <strong class="color">Options</strong>
+            <div *ngFor="let option of bestChoiceDetails">
+              <div style="margin-left: 10px;">{{option.value}}</div><hr/>
+            </div>
+
+            </div>
+            <div class="col">
+              <strong class="color">Right Answer</strong>
+              <div *ngFor="let answer of bestChoiceDetails">
+                <div style="margin-left: 12px;"><span *ngIf=answer.is_yes>Yes</span><span *ngIf=!answer.is_yes>No</span></div><hr/>
+              </div>
+            </div>
+          </div>
+        </div>
+    </div>
+
+<div *ngIf="questionDetails?.type_Id?.id==3">
+  <div class="container">
+    <div class="row">
+      <div class="col color">
+        <h6>Multiple Choice</h6>
+      </div>
+      <div class="col">
+       <strong class="color">Options</strong>
+      <div *ngFor="let option of multipleChoiceDetails">
+        <div style="margin-left: 10px;">{{option.value}}</div><hr/>
+      </div>
+
+      </div>
+      <div class="col">
+        <strong class="color">Right Answer</strong>
+        <div *ngFor="let answer of multipleChoiceDetails">
+          <div style="margin-left: 12px;"><span *ngIf=answer.is_yes>Yes</span><span *ngIf=!answer.is_yes>No</span></div><hr/>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      
+        <div class="modal-footer">
+          <button type="button" class="btn btn-info" data-dismiss="modal"><i class="fa fa-times-circle" style="color: white;" aria-hidden="true"></i>&nbsp;Close</button>
+        </div>
+      </div>
+    </div>
+  </div>

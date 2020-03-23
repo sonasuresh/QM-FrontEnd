@@ -1,0 +1,228 @@
+<app-navbar></app-navbar>
+<br/><br/>
+<div class="container">
+    <h3 class="left color">Questions</h3>
+    <div class="right">
+    <button type="button" class="btn btn-info" (click)="getActiveQuestions()" title="Click to view Activated Questions">View Active Questions</button>&nbsp;
+        <span class="dropdown">
+            <button class="btn btn-info dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              Options
+            </button>
+            <div class="dropdown-menu" aria-labelledby="dropdownMenu2">
+              <button class="dropdown-item hover" (click)="deleteQuestion()">Delete Questions</button>
+              <button class="dropdown-item hover"(click)="activateQuestion()">Deactivate Questions</button>
+            </div>
+        </span>&nbsp;
+    </div><br/><br/>
+   <hr/>
+   <div class="alert alert-info alert-dismissible fade show color" *ngIf="activateSuccessMessageFlag">
+    <strong >Success!<span aria-expanded="false" class="test">Question Activated Successfully.!</span></strong>
+    <button type="button" class="close" data-dismiss="alert">&times;</button>
+</div>
+<div class="alert alert-danger alert-dismissible fade show warningcolor" *ngIf="activateFailureMessageFlag">
+  <strong >Error!<span aria-expanded="false" class="test">Question Activation Failed.!</span></strong>
+  <button type="button" class="close" data-dismiss="alert">&times;</button>
+</div>
+<div class="alert alert-info alert-dismissible fade show color" *ngIf="deleteSuccessMessageFlag">
+<strong >Success!<span aria-expanded="false" class="test">Question Deleted Successfully.!</span></strong>
+<button type="button" class="close" data-dismiss="alert">&times;</button>
+</div>
+<div class="alert alert-danger alert-dismissible fade show warningcolor" *ngIf="deleteFailureMessageFlag">
+<strong >Error!<span aria-expanded="false" class="test">Question Deletion Failed.!</span></strong>
+<button type="button" class="close" data-dismiss="alert">&times;</button>
+</div>
+    <h4 class="color">Deactivated Questions</h4>
+    <br />
+    <div class="row">
+      <div class="col-4 ">
+        <span>
+          Display
+          <select id="records"  (change)="selectPageChangeHandler($event)"
+            title="Click to Limit the Number of records">
+            <option value="10" selected>10</option>
+            <option value="20">20</option>
+            <option value="50">50</option>
+          </select>
+          records
+        </span>
+      </div>
+      <div class="col-2">
+        <nav>
+          <ul class="pagination">
+            <li class="page-item">
+              <a class="page-link" href="#" aria-label="Previous">
+                <span aria-hidden="true" class="color">&laquo;</span>
+                <span class="sr-only">Previous</span>
+              </a>
+            </li>
+            <li *ngFor="let page of counter(totalPages); let i=index" class="page-item">
+  
+              <a class="page-link color" (click)="onSelectPage(i)"><div class="color">{{i+1}}</div></a>
+  
+            
+  
+            </li>
+            <li class="page-item">
+              <a class="page-link" href="#" aria-label="Next">
+                <span aria-hidden="true" class="color">&raquo;</span>
+                <span class="sr-only">Next</span>
+              </a>
+            </li>
+          </ul>
+        </nav>
+      </div>
+    </div>
+    <div class="align-right">
+      <i class="fa fa-refresh" aria-hidden="true">&nbsp;<a href="/deactive" class="color" title="Reset all filters to default">Reset</a></i>
+      </div><br/>
+      <nav class="navbar right">
+        <div class="input-icons">     
+          <input #tag (keyup.enter)="onEnter(tag.value)" placeholder="&#xF002; Search" title="Search based on Tags" class="form-control mr-sm-2 " style="font-family:Arial, FontAwesome" />
+        <!-- <input #tag (keyup.enter)="onEnter(tag.value)" class="form-control mr-sm-2 " placeholder='<i class="fa fa-search icon"></i>'> -->
+        </div>
+        </nav>
+    <br/><br/><br/>
+    <table class="table shadow">
+      <thead class="thead-info color">
+        <tr>
+          <th><input type='checkbox'[(ngModel)]="masterSelected" name="list_name" value="m1" (change)="checkUncheckAll()">
+            <th scope="col">S.No.</th>
+            <th scope="col">Question</th>
+            <th scope="col">Question Type</th>
+            <th scope="col">Tags</th>
+            <th scope="col">Category</th>
+            <th scope="col">Level</th>
+            <th scope="col">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let deactive of deactiveQuestions; let i=index">
+          <th><div class="form-check form-check-inline"><input type="checkbox" [(ngModel)]="deactive.isSelected" name="list_name" value="{{deactive.id}}" (change)="isAllSelected()">
+          </div></th>
+            <th>{{(selectedRecords * ((pageNo+1)-1))+i+1}}</th>
+            <td><a href="" class="link black" data-toggle="modal" data-target="#exampleModalLong"
+              (click)="getDetails(deactive.id)" title="Click to view Question Details">{{deactive?.title}}</a></td>
+            <td>{{deactive.type_Id.name}}</td>
+            <td>{{deactive.tags}}</td>
+            <td>{{deactive.category_Id.name}}</td>
+            <td>{{deactive.level_Id.name}}</td>
+            <td><i class="fa fa-arrow-circle-up activate" title="Click to deactivate this Question" (click)="activateThisQuestion(deactive.id)"></i>&nbsp;<i class="fa fa-trash-o delete" title="Click to delete this Question" (click)="deleteThisQuestion(deactive.id)"></i></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Modal -->
+<div class="modal fade" id="exampleModalLong" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle"
+aria-hidden="true">
+<div class="modal-dialog" role="document">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h5 class="modal-title color" id="exampleModalLongTitle"><div align="center">Question View</div></h5>
+      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body">
+      <div class="container">
+        <div class="row">
+          <label class="col-4 color"><h6>Question Type</h6></label>
+          <div class="col-7">
+            {{questionDetails?.type_Id?.name}}
+          </div>
+        </div>
+        <div class="row">
+          <label class="col-4 color"><h6>Title</h6></label>
+          <div class="col-6">
+            {{questionDetails?.title}}
+          </div>
+        </div>
+        <div class="row">
+          <label class="col-4 color"><h6>Category</h6></label>
+          <div class="col-6">
+            {{questionDetails?.category_Id?.name}}
+          </div>
+        </div>
+        <div class="row">
+          <label class="col-4 color"><h6>Level</h6></label>
+          <div class="col-6">
+            {{questionDetails?.level_Id?.name}}
+          </div>
+        </div>
+        <div class="row">
+          <label class="col-4 color"><h6>Duration</h6></label>
+          <div class="col-6">
+            {{questionDetails?.duration}}
+          </div>
+        </div>
+        <div class="row">
+          <label class="col-4 color"><h6>Skill Points</h6></label>
+          <div class="col-6">
+            {{questionDetails?.skill_points}}
+          </div>
+        </div>
+        <div class="row">
+          <label class="col-4 color"><h6>Score</h6></label>
+          <div class="col-6">
+            {{questionDetails?.score}}
+          </div>
+        </div>
+        <div class="row">
+          <label class="col-4 color"><h6>Tags</h6></label>
+          <div class="col-6">
+            {{questionDetails?.tags}}
+          </div>
+        </div>
+        <div *ngIf="questionDetails?.type_Id?.id!=5" class="row">
+          <label class="col-4 color"> <h6>Answer</h6></label>
+          <div class="col-6">
+            {{option?.answer}}
+          </div><br />
+
+        </div>
+        <div *ngIf="questionDetails?.type_Id?.id==5">
+          <div class="container">
+            <div class="row">
+              <div class="col-3 color">
+                <h6>Match</h6>
+              </div>
+              <div class="col">
+               <strong class="color">Column A</strong>
+              <div *ngFor="let col_a of matchDetails">
+                <div style="margin-left: 10px;">{{col_a.col_a}}</div>
+              </div>
+
+              </div>
+              <div class="col">
+                <strong class="color">Column B</strong>
+                <div *ngFor="let col_b of matchDetails">
+                  <div style="margin-left: 12px;">{{col_b.col_b}}</div>
+                </div>
+              </div>
+            </div>
+          </div>
+      </div>
+        <div *ngIf="questionDetails?.type_Id?.id==2">
+          <div class="row">
+            <label class="col-4 color"> <h6>Correct Explanation</h6></label>
+            <div class="col-6">
+              {{option?.cExplanation}}
+            </div>
+          </div>
+          <div class="row">
+            <label class="col-4 color"> <h6>Wrong Explanation</h6></label>
+            <div class="col-6">
+              {{option?.fExplanation}}
+            </div>
+          </div>
+
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-info" data-dismiss="modal"><i class="fa fa-times-circle" style="color: white;" aria-hidden="true"></i>&nbsp;Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+  

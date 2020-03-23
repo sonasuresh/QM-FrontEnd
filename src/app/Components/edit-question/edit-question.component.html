@@ -1,0 +1,391 @@
+<!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-tagsinput/0.8.0/bootstrap-tagsinput.css" crossorigin="anonymous"> -->
+
+<app-navbar></app-navbar>
+<div class="alert alert-info alert-dismissible fade show color" *ngIf="updateQuestionSuccessMessageFlag">
+  <strong >Success!<span aria-expanded="false" class="test">Question Updated Successfully.!</span></strong>
+  <button type="button" class="close" data-dismiss="alert">&times;</button>
+</div>
+<div class="alert alert-danger alert-dismissible fade show warningcolor" *ngIf="updateQuestionFailureMessageFlag">
+  
+<strong >Error!<span aria-expanded="false" class="test">Question Updation Failed.!</span></strong>
+<button type="button" class="close" data-dismiss="alert">&times;</button>
+</div>
+<br /><br />
+<form [formGroup]="questionForm">
+  <div class="container">
+    <h3 class="left color">Questions</h3>
+    <div class="right">
+      <button type="button" class="btn btn-info" (click)="save()"><i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+        &nbsp;Update</button>&nbsp;
+      <button type="button" class="btn btn-info" (click)="back()"><i class="fa fa-backward"
+          aria-hidden="true"></i>&nbsp;Back</button>
+
+    </div><br /><br />
+    <hr />
+    <div class="container">
+      <div class="form-group row">
+        <label for="colFormLabel" class="col-sm-2 col-form-label">Question Type</label>
+        <div class="col-sm-10">
+          <div class="btn-group">
+            <select class="btn btn-light dropdown-toggle border border-dark"
+              formControlName="type">
+              <option [value]="questionDetails?.type_Id?.id" disabled selected class="hover">{{questionDetails?.type_Id?.name}}</option>
+            </select>
+          </div>
+        </div>
+      </div>
+      <div class="form-group row">
+        <label for="colFormLabel" class="col-sm-2 col-form-label">Question Title</label>
+        <div class="col-sm-10">
+          <input type="text" class="form-control" id="title" [value]="questionDetails?.title" formControlName="title" >
+        </div>
+      </div>
+      <div class="form-group row">
+        <label for="colFormLabel" class="col-sm-2 col-form-label">Question Content</label>
+        <div class="col-sm-10">
+          <!-- <angular-editor formControlName="content" rows="4"></angular-editor> -->
+          <textarea class="form-control" id="content" formControlName="content" rows="3"></textarea> 
+        </div>
+      </div>
+      <div class="form-group row">
+        <label for="colFormLabel" class="col-sm-2 col-form-label">Question Category</label>
+        <div class="col-sm-10">
+          <div class="btn-group">
+            <select class="btn btn-light dropdown-toggle border border-dark" formControlName="category">
+              <option value="" selected>{{questionDetails?.category_Id?.name}}</option>
+              <option *ngFor="let category of Categories" [value]="category.id">{{category.name}}</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-group row">
+        <label for="colFormLabel" class="col-sm-2 col-form-label">Tags</label>
+        <div class="col-sm-10">
+          <!-- <input type="text" formControlName="tags" [value]="questionDetails?.tags" class="form-control"> -->
+          <tag-input placeholder="enter key tag" formControlName="tags" [(ngModel)]="tags"  [modelAsStrings]="true">
+          </tag-input>
+
+          <!-- <input type="tags" class="form-control" id="tags" formControlName="tags" placeholder="tags"> -->
+        </div>
+      </div>
+      <div class="form-group row">
+        <label for="colFormLabel" class="col-sm-2 col-form-label">Levels</label>
+        <div class="col-sm-10">
+          <div class="btn-group">
+            <select class="btn btn-light dropdown-toggle border border-dark" formControlName="levels">
+              <option value="" disabled selected>{{questionDetails?.level_Id?.name}}</option>
+
+              <option *ngFor="let level of Levels" [value]="level.id">{{level.name}}</option>
+            </select>
+          </div>
+        </div>
+      </div>
+      <div class="form-group row">
+        <label for="colFormLabel" class="col-sm-2 col-form-label">Skill Points</label>
+        <div class="col-sm-10">
+          <input type="text" class="form-control" pattern="[0-9]{10}"  formControlName="skill_points" id="points"
+            placeholder="10">
+        </div>
+      </div>
+      <div class="form-group row">
+        <label for="colFormLabel" class="col-sm-2 col-form-label">Duration</label>
+
+        <div class="col-sm-10">
+          <input type="time" id="duration" formControlName="duration" placeholder="0h 02m 00s" step="1">
+        </div>
+      </div>
+      <div class="form-group row">
+        <label for="colFormLabel" class="col-sm-2 col-form-label">Score</label>
+        <div class="col-sm-10">
+          <input type="text" class="form-control" pattern="^[0-9].[0-9]$" formControlName="score" id="score"
+            placeholder="1.0">
+        </div>
+      </div>
+
+
+      <div [ngSwitch]="typeValue">
+
+        <div *ngSwitchCase="1">
+          <br />
+          <div class="form-group row">
+            <div class="card border-info text-white mb-6" style="width: 69rem;">
+              <div class="card-header color"><strong>Answer Options</strong>
+               <span class="right"> <i class="fa fa-plus-circle fa-2x" (click)=increaseRow()></i></span>
+              
+              </div>
+
+              <div class="card-body text-info">
+
+                <table class="table table-bordered table-light" style="border: solid 1px gray;"  id="cola">
+                  <tr>
+                    <th class="color">
+                      <div align="center">S.No</div>
+                    </th>
+                    <th class="color">
+                      <div align="center">Answer Option</div>
+                    </th>
+                    <th class="color" style="width: 170px;">
+                      <div align="center">Right Answer</div>
+                    </th>
+                    <th class="color">
+                      <div align="center">Delete</div>
+                    </th>
+                  </tr>
+                  <tr *ngFor="let row of range(noOfOptions); let i=index">
+                    <td>
+                      <div align="center">{{i+1}}</div>
+                    </td>
+                    <td>
+                      <textarea #bestChoiceOption style="width: 100%;"
+                        (change)="bestchoicequestion(bestChoiceOption.value,i)"
+                        [value]="bestchoice[i]"></textarea></td>
+                    <td>
+                      <div class="container">
+
+                        <div class="row">
+                          <div class="form-check">
+
+                            <input type="checkbox" class="form-check-input" (change)=addStickyId(row) [checked]="isStickyflag[i]" id="sticky">
+                            <label class="form-check-label" for="exampleCheck1">is Sticky</label>
+
+                          </div><br />
+                        </div>
+                        <div class="row">
+                          <div class="form-radio">
+                            <input type="radio" class="form-radio-input" (change)=addIsYes(row) name="yes" value="row" [checked]="isYes[i]" id="yes">
+                            <label class="form-radio-label" for="exampleCheck1">&nbsp;&nbsp;is Yes</label></div>
+                        </div>
+                      </div>
+                    </td>
+                    <td>
+                      <div align="center"><i class="fa fa-trash-o delete" (click)="removebestchoicerow(i)" aria-hidden="true"></i>
+                      </div>
+                    </td>
+
+                  </tr>
+                </table>
+              </div>
+            </div>
+
+          </div>
+        </div>
+        <div *ngSwitchCase="5">
+
+          <div class="row">
+            <div class="col">
+              <div class="card border-info mb-3" style="max-width: 35rem;">
+                <div class="card-header color"><strong>Column A</strong>
+                  <span class="right"> <i class="fa fa-plus-circle fa-2x" (click)=increaseColaRow()></i></span>
+                
+                </div>
+                <div class="card-body text-info">
+                  <table class="table table-bordered table-light" id="cola">
+
+                    <tr>
+                      <th class="color"><div align="center">Delete</div></th>
+                      <th class="color">
+                        <div align="center">To Be Matched</div>
+                      </th>
+                      <th class="color">
+                        <div align="center">Match</div>
+                      </th>
+                    </tr>
+
+
+
+
+                    <tr *ngFor="let row of rangeCola(noOfMatchQuestions); let i=index">
+                      <td><div align="center"><i class="fa fa-trash-o delete" (click)="removea(i)" aria-hidden="true"></i></div></td>
+                      <td><textarea #colaquestion style="width: 100%;" (change)="matchQuestion(colaquestion.value,i)" [value]="rowarraya[i]" ></textarea></td>
+                      <td>
+                        <div align="center" style="margin-top:10px ;" ><input #colaanswer (change)="matchOption(colaanswer.value,i)" type="number" min="1" max="4" [value]="rowarrayOption[i]"/></div>
+                      </td>
+                    </tr>
+
+
+
+                  </table>
+                </div>
+              </div>
+
+            </div>
+            <div class="col">
+              <div class="card border-info mb-3" style="max-width: 35rem;">
+                <div class="card-header color"><strong>Column B</strong>
+                  <span class="right"> <i class="fa fa-plus-circle fa-2x" (click)=increaseColbRow()></i></span>
+                
+                </div>
+                <div class="card-body text-info">
+                  <table class="table table-bordered table-light">
+
+                    <tr>
+                      <th class="color">
+                        <div align="center">Item</div>
+                      </th>
+                      <th class="color">
+                        <div align="center">Available Matches</div>
+                      </th>
+                     
+                      <th class="color"><div align="center">Delete</div></th>
+
+                    </tr>
+
+
+
+
+                    <tr *ngFor="let row of rangeColb(noOfMatchAnswers); let i=index">
+                      <td> <div align="center">{{i+1}}</div></td>
+                      <td><textarea #colbanswer (change)="matchAnswer(colbanswer.value,i)" [value]="rowarrayb[i]" style="width: 100%;"></textarea></td>
+                      <td><div align="center"><i class="fa fa-trash-o delete" (click)="removeb(i)" aria-hidden="true"></i></div></td>
+
+
+                    </tr>
+
+
+
+                  </table>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+        
+        <div *ngSwitchCase="6">
+          <div class="form-group row">
+            <label for="colFormLabel" class="col-sm-2 col-form-label">Answer Option</label>
+            <div class="col-sm-10">
+              <input type="email" class="form-control" formControlName="numericalAnswer" id="exampleInputEmail1"
+                aria-describedby="emailHelp">
+            </div>
+          </div>
+          <div class="form-group row">
+            <label for="colFormLabel" class="col-sm-2 col-form-label">Right Answer Explanation</label>
+            <div class="col-sm-10">
+              <textarea class="form-control" id="exampleFormControlTextarea1"
+                formControlName="numericalAnswercorrectExplanation" rows="3"></textarea>
+            </div>
+          </div>
+          <div class="form-group row">
+            <label for="colFormLabel" class="col-sm-2 col-form-label">Wrong Answer Explanation</label>
+            <div class="col-sm-10">
+              <textarea class="form-control" id="exampleFormControlTextarea1"
+                formControlName="numericalAnswerwrongExplanation" rows="3"></textarea>
+            </div>
+          </div>
+         
+        </div>
+        <div *ngSwitchCase="3">
+          <br />
+          <div class="form-group row">
+            <div class="card border-info text-white mb-6" style="width: 69rem;">
+              <div class="card-header color"><strong>Answer Options</strong>
+               <span class="right"> <i class="fa fa-plus-circle fa-2x" (click)=increaseRow()></i></span>
+              
+              </div>
+
+              <div class="card-body text-info">
+
+                <table class="table table-bordered table-light" style="border: solid 1px gray;"  id="cola">
+                  <tr>
+                    <th class="color">
+                      <div align="center">S.No</div>
+                    </th>
+                    <th class="color">
+                      <div align="center">Answer Option</div>
+                    </th>
+                    <th class="color" style="width: 170px;">
+                      <div align="center">Right Answer</div>
+                    </th>
+                    <th class="color">
+                      <div align="center">Delete</div>
+                    </th>
+                  </tr>
+                  <tr *ngFor="let row of range(noOfOptions); let i=index">
+                    <td>
+                      <div align="center">{{i+1}}</div>
+                    </td>
+                    <td>
+                      <textarea #bestChoiceOption style="width: 100%;"
+                        (change)="bestchoicequestion(bestChoiceOption.value,i)"
+                        [value]="bestchoice[i]"></textarea></td>
+                    <td>
+                      <div class="container">
+
+                        <div class="row">
+                          <div class="form-check">
+
+                            <input type="checkbox" class="form-check-input" (change)=addStickyId(row) [checked]="isStickyflag[i]" id="sticky">
+                            <label class="form-check-label" for="exampleCheck1">is Sticky</label>
+
+                          </div><br />
+                        </div>
+                        <div class="row">
+                          <div class="form-check">
+                            <input type="checkbox" class="form-check-input" (change)=addIsYesId(row)  [checked]="isYesFlag[i]" id="yes">
+                            <label class="form-check-label" for="exampleCheck1">&nbsp;&nbsp;is Yes</label></div>
+                        </div>
+                      </div>
+                    </td>
+                    <td>
+                      <div align="center"><i class="fa fa-trash-o delete" (click)="removebestchoicerow(i)" aria-hidden="true"></i>
+                      </div>
+                    </td>
+
+                  </tr>
+                </table>
+              </div>
+            </div>
+
+          </div>
+        </div>
+        <div *ngSwitchCase="4">
+          <div class="form-group row">
+            <label for="colFormLabel" class="col-sm-2 col-form-label">Answer Hint</label>
+            <div class="col-sm-10">
+              <textarea class="form-control" formControlName="shortanswer" id="exampleFormControlTextarea1"
+                rows="3"></textarea>
+            </div>
+          </div>
+        </div>
+        <div *ngSwitchCase="2">
+          <div class="form-group row">
+            <label for="colFormLabel" class="col-sm-2 col-form-label">Right Answer</label>&nbsp;&nbsp;&nbsp;
+            <div class="form-check form-check-inline">
+                <input type="radio" id="option"  name="option" [value]="true" [checked]=flag
+                >
+              <!-- <input class="form-check-input" type="radio" formControlName="option" id="inlineRadio1" value="true" checked> -->
+              <label class="form-check-label" for="inlineRadio1" >True</label>
+            </div>
+            <div class="form-check form-check-inline">
+              <input class="form-check-input" type="radio"  formControlName="option" id="option" name="option" [checked]=falseflag [value]="false">
+              <label class="form-check-label" for="inlineRadio2">False</label>
+            </div>
+          </div>
+
+          <div class="form-group row">
+            <label for="colFormLabel" class="col-sm-2 col-form-label">Explanation for True</label>
+            <div class="col-sm-10">
+              <!-- formControlName="correctExplanation" formControlName="wrongExplanation"-->
+              <textarea class="form-control"  formControlName="correctExplanation" id="exampleFormControlTextarea1" rows="3"
+              ></textarea>
+              
+            </div>
+          </div>
+          <div class="form-group row">
+            <label for="colFormLabel" class="col-sm-2 col-form-label">Explanation for False</label>
+            <div class="col-sm-10">
+              <textarea class="form-control" formControlName="wrongExplanation" id="exampleFormControlTextarea1" rows="3"
+                ></textarea>
+            </div>
+          </div>
+        </div>
+        <p *ngSwitchDefault></p>
+      </div>
+
+
+    </div>
+  </div>
+</form>

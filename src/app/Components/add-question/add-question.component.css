@@ -1,0 +1,37 @@
+.align{
+    margin-top: 50px;
+}
+.right{
+    float: right;
+}
+.left{
+    float: left;
+    margin-right: 500px; 
+}
+.leftalign{
+    margin-left: 50px;
+}
+.select{
+    height:100px;
+    overflow:scroll;
+}
+input[type=time]::-webkit-datetime-edit-ampm-field {
+    display: none;
+  }
+  .color{
+    color:rgb(82, 180, 212)
+}
+.hover:hover{
+    background-color: lightblue;
+}
+input[type=number]::-webkit-inner-spin-button {
+    opacity: 1;
+    border-left: 1px solid rgb(250, 33, 33);
+    /* background-color: lightblue; */
+ }
+ .delete{
+     color: red;
+ }
+ i{
+    cursor: pointer;
+ }
