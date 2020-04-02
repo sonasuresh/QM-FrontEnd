@@ -45,14 +45,15 @@ export class InviteUserComponent implements OnInit {
     //this.roleId=this.userForm.get('role').value
     
    console.log(this.userForm.value)
+   this.userService.addUser(this.userForm.value,this.token).then((res:any)=>{
     this.userService.sendInvite(this.userForm.value,this.token).then((res:any)=>{
-      this.userService.addUser(this.userForm.value,this.token).then((res:any)=>{
-        
-      })
+     
       alert('Invitation Sent Successfully..!')
     }).catch((e)=>{
       alert('Error Occurred...!Try Again')
-    })
+    }) 
+  })
+   
    }
 
 
