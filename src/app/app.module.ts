@@ -19,6 +19,7 @@ import { TagInputModule } from 'ngx-chips';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations'; // this is needed!
 
 import { NgxTagsInputModule } from 'ngx-tags-input';
+import { InviteUserComponent } from './Components/invite-user/invite-user.component';
 
 //import { TimeValueAccessorModule } from "ng-time-value-accessor";
 
@@ -34,6 +35,7 @@ import { NgxTagsInputModule } from 'ngx-tags-input';
     LoginComponent,
     NewUserComponent,
     EditQuestionComponent,
+    InviteUserComponent,
     //TimeValueAccessorModule
   ],
   imports: [

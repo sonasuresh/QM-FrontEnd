@@ -22,12 +22,12 @@ export class NewUserComponent implements OnInit {
     });
   }
   
-  addUser(){
-    this.userService.addUser(this.userForm.value).then((res:any)=>{
-      alert('User Added Successfully..!')
-    }).catch((e)=>{
-      alert('Error Occurred in Adding New User...!Try Again')
-    })
-  }
+  // addUser(){
+  //   this.userService.addUser(this.userForm.value).then((res:any)=>{
+  //     alert('User Added Successfully..!')
+  //   }).catch((e)=>{
+  //     alert('Error Occurred in Adding New User...!Try Again')
+  //   })
+  // }
 
 }

@@ -28,7 +28,7 @@ export class ActiveQuestionsComponent implements OnInit {
  deactivateFailureMessageFlag:boolean=false;
  deleteSuccessMessageFlag:boolean=false;
  deleteFailureMessageFlag:boolean=false;
- 
+ token:String
   constructor(private questionService:QuestionServiceService,private router:Router) { }
   masterSelected:boolean;
   checklist:any;
@@ -36,6 +36,10 @@ export class ActiveQuestionsComponent implements OnInit {
   id:number[];
   pageNo:number=0;
   ngOnInit() {
+  if(!JSON.parse(localStorage.getItem('token'))){
+   window.location.href="/login"
+  }
+  this.token=JSON.parse(localStorage.getItem('token'))
     this.getActivatedQuestions();
   }
   counter(totalPages: number) {
@@ -43,7 +47,7 @@ export class ActiveQuestionsComponent implements OnInit {
 }
   getActivatedQuestions = () => {
     
-    this.questionService.getActiveQuestions().then((res: any) => {
+    this.questionService.getActiveQuestions(this.token).then((res: any) => {
       this.activeQuestions = res.data.content
       this.activeQuestionsLength=this.activeQuestions.length;
       this.totalPages=res.data.totalPages;
@@ -80,7 +84,7 @@ export class ActiveQuestionsComponent implements OnInit {
 
   onEnter(value:string){
     status = "active"
-    this.questionService.getQuestionsBasedOnTags(value,status).then((res:any)=>{
+    this.questionService.getQuestionsBasedOnTags(value,status,this.token).then((res:any)=>{
       if(value.length==0){
     this.getActivatedQuestions();
 
@@ -100,7 +104,7 @@ export class ActiveQuestionsComponent implements OnInit {
   selectPageChangeHandler (event: any) {
     this.selectedRecords = event.target.value;
     //console.log(this.pageNo)
-    this.questionService.pageRecord(this.selectedRecords,this.pageNo).then((res:any)=>{
+    this.questionService.pageRecord(this.selectedRecords,this.pageNo,this.token).then((res:any)=>{
       this.totalPages=res.data.totalPages;
       this.activeQuestions=res.data.content;
       
@@ -108,7 +112,7 @@ export class ActiveQuestionsComponent implements OnInit {
   }
   onSelectPage(pageNumber:number){
    this.pageNo=pageNumber
-   this.questionService.pageRecord(this.selectedRecords,this.pageNo).then((res:any)=>{
+   this.questionService.pageRecord(this.selectedRecords,this.pageNo,this.token).then((res:any)=>{
     this.totalPages=res.data.totalPages;
     this.activeQuestions=res.data.content;
     
@@ -124,19 +128,19 @@ export class ActiveQuestionsComponent implements OnInit {
       this.option=(JSON.parse(this.questionDetails.option))
     var type_id = this.questionDetails.type_Id.id
     if(type_id==5){
-      this.questionService.getMatchDetails(id).then((res:any)=>{
+      this.questionService.getMatchDetails(id,this.token).then((res:any)=>{
         console.log(res.data)
         this.matchDetails=res.data
       })
     }
     if(type_id==1){
-      this.questionService.getBestChoiceDetails(id).then((res:any)=>{
+      this.questionService.getBestChoiceDetails(id,this.token).then((res:any)=>{
         this.bestChoiceDetails=res.data
         //console.log(this.bestChoiceDetails[0].value)
       })
     }
     if(type_id==3){
-      this.questionService.getMultipleChoiceDetails(id).then((res:any)=>{
+      this.questionService.getMultipleChoiceDetails(id,this.token).then((res:any)=>{
         this.multipleChoiceDetails=res.data
         console.log(this.multipleChoiceDetails)
       })
@@ -146,7 +150,7 @@ export class ActiveQuestionsComponent implements OnInit {
   }
   deleteQuestion(){
     if(confirm("Are you sure to delete this Question?")){
-    this.questionService.deleteQuestion(this.checkedList).then((res: any) => {
+    this.questionService.deleteQuestion(this.checkedList,this.token).then((res: any) => {
       this.deleteSuccessMessageFlag=true;this.getActivatedQuestions();}).catch(
       (e) => this.deleteFailureMessageFlag=true)
     }   
@@ -154,7 +158,7 @@ export class ActiveQuestionsComponent implements OnInit {
   deactivateQuestion(){
     if(confirm("Are you sure to deactivate this Question?")){
     const status="deactive";
-    this.questionService.updateQuestionStatus(status,this.checkedList).then((res: any) => {this.deactivateSuccessMessageFlag=true;
+    this.questionService.updateQuestionStatus(status,this.checkedList,this.token).then((res: any) => {this.deactivateSuccessMessageFlag=true;
       ;this.getActivatedQuestions();}).catch(
       () => this.deactivateFailureMessageFlag=true)
     }
@@ -164,7 +168,7 @@ export class ActiveQuestionsComponent implements OnInit {
     this.id=[];
     const status="deactive";
     this.id.push(value)
-     this.questionService.updateQuestionStatus(status,this.id).then((res: any) => {
+     this.questionService.updateQuestionStatus(status,this.id,this.token).then((res: any) => {
       this.deactivateSuccessMessageFlag=true;
       this.getActivatedQuestions()
       }).catch(
@@ -176,7 +180,7 @@ export class ActiveQuestionsComponent implements OnInit {
     if(confirm("Are you sure to delete this Question?")){
     this.id=[];
     this.id.push(value)
-    this.questionService.deleteQuestion(this.id).then((res: any) => {
+    this.questionService.deleteQuestion(this.id,this.token).then((res: any) => {
       this.deleteSuccessMessageFlag=true
       ;this.getActivatedQuestions();}).catch(
       (e) => this.deleteFailureMessageFlag=true)

@@ -8,60 +8,90 @@ import axios from 'axios';
 export class QuestionServiceService {
 
   constructor() { }
-  getActiveQuestions() {
-    return axios.get("http://localhost:9004/questions/activated")
+  getActiveQuestions(auth_token) {
+    const headers={
+      'Authorization': 'Bearer ' +auth_token
+    }
+    return axios.get("http://localhost:9004/questions/activated",{headers:headers})
   }
-  getDeactiveQuestions(){
-    return axios.get("http://localhost:9004/questions/deactivated")
+  getDeactiveQuestions(auth_token){
+    const headers={
+      'Authorization': 'Bearer ' +auth_token
+    }
+    return axios.get("http://localhost:9004/questions/deactivated",{headers:headers})
   }
-  getQuestionsBasedOnTags(id: any,status:any) {
+  getQuestionsBasedOnTags(id: any,status:any,auth_token) {
     const params = {
       tagName: id,
       status:status
     }
-    return axios.get("http://localhost:9004/questions/basedontags", { params })
+    const headers={
+      'Authorization': 'Bearer ' +auth_token
+    }
+    return axios.get("http://localhost:9004/questions/basedontags", { params,headers:headers})
   }
-  pageRecord(records:any,pageNo:any){
+  pageRecord(records:any,pageNo:any,auth_token){
     const params = {
       pageSize: records,
       pageNo:pageNo
     }
-    return axios.get("http://localhost:9004/questions/activated",{params})
+    const headers={
+      'Authorization': 'Bearer ' +auth_token
+    }
+    return axios.get("http://localhost:9004/questions/activated",{params,headers:headers})
   }
-  pageRecordDeactivated(records:any,pageNo:any){
+  pageRecordDeactivated(records:any,pageNo:any,auth_token){
     const params = {
       pageSize: records,
       pageNo:pageNo
     }
-    return axios.get("http://localhost:9004/questions/deactivated",{params})
+    const headers={
+      'Authorization': 'Bearer ' +auth_token
+    }
+    return axios.get("http://localhost:9004/questions/deactivated",{params,headers:headers})
   }
 
  
-  getLevels(){
-    return axios.get("http://localhost:9004/questions/levels")
+  getLevels(auth_token){
+    const headers={
+      'Authorization': 'Bearer ' +auth_token
+    }
+    return axios.get("http://localhost:9004/questions/levels",{headers:headers})
   }
-  getTypes(){
-    return axios.get("http://localhost:9004/questions/types")
+  getTypes(auth_token){
+    const headers={
+      'Authorization': 'Bearer ' +auth_token
+    }
+    return axios.get("http://localhost:9004/questions/types",{headers:headers})
   }
-  getCategories(){
-    return axios.get("http://localhost:9004/questions/categories")
+  getCategories(auth_token){
+    const headers={
+      'Authorization': 'Bearer ' +auth_token
+    }
+    return axios.get("http://localhost:9004/questions/categories",{headers:headers})
   }
-  deleteQuestion(data:number[]){
+  deleteQuestion(data:number[],auth_token){
     const body = {
       id: [1,2]
     };
+    const headers={
+      'Authorization': 'Bearer ' +auth_token
+    }
     return axios.delete("http://localhost:9004/questions/delete",{
       data: {
         id: data
-      }
-    });
+      ,headers:headers}
+ });
   }
-  updateQuestionStatus(status:any,data:number[]){
+  updateQuestionStatus(status:any,data:number[],auth_token){
     const body = {
       "id":data,
       "status":status
     };
-    return axios.put("http://localhost:9004/questions/updatestatus",body);
+    const headers={
+      'Authorization': 'Bearer ' +auth_token
+    }
+    return axios.put("http://localhost:9004/questions/updatestatus",body,{headers:headers});
   }
   getQuestionDetails(id:any){
     const params = {
@@ -69,34 +99,49 @@ export class QuestionServiceService {
     }
     return axios.get("http://localhost:9004/questions/", { params }) 
   }
-  addQuestion(questionPayload:any){
+  addQuestion(questionPayload:any,auth_token){
     const data={
       ...questionPayload
     }
-    return axios.post("http://localhost:9004/questions/add", data)
+    const headers={
+      'Authorization': 'Bearer ' +auth_token
+    }
+    return axios.post("http://localhost:9004/questions/add", data,{headers:headers})
   }
-  getMatchDetails(id:any){
+  getMatchDetails(id:any,auth_token){
     const params={
       qid:id
     }
-    return axios.get("http://localhost:9004/questions/match/",{params})
+    const headers={
+      'Authorization': 'Bearer ' +auth_token
+    }
+    return axios.get("http://localhost:9004/questions/match/",{params,headers:headers})
   }
-  getBestChoiceDetails(id:any){
+  getBestChoiceDetails(id:any,auth_token){
     const params={
       qid:id
     }
-    return axios.get("http://localhost:9004/questions/bestchoice/",{params})
+    const headers={
+      'Authorization': 'Bearer ' +auth_token
+    }
+    return axios.get("http://localhost:9004/questions/bestchoice/",{params,headers:headers})
   }
-  getMultipleChoiceDetails(id:any){
+  getMultipleChoiceDetails(id:any,auth_token){
     const params={
       qid:id
     }
-    return axios.get("http://localhost:9004/questions/multiplechoice/",{params})
+    const headers={
+      'Authorization': 'Bearer ' +auth_token
+    }
+    return axios.get("http://localhost:9004/questions/multiplechoice/",{params,headers:headers})
   }
-  updateQuestion(questionPayload:any){
+  updateQuestion(questionPayload:any,auth_token){
     const data={
       ...questionPayload
     }
-    return axios.put("http://localhost:9004/questions/edit", data)
+    const headers={
+      'Authorization': 'Bearer ' +auth_token
+    }
+    return axios.put("http://localhost:9004/questions/edit", data,{headers:headers})
   }
 }

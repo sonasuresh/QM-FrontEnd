@@ -28,7 +28,7 @@ export class EditQuestionComponent implements OnInit {
   answer: any
   flag:boolean;
   falseflag:boolean
- optionId:any;
+  optionId:any;
 
   matchDetails: Array<any> = []
   bestChoiceDetails: Array<any> = []
@@ -49,17 +49,23 @@ export class EditQuestionComponent implements OnInit {
   MatchQuestionrangeArray=[]
   noOfMatchAnswers:number;
   MatchAnswerrangeArray=[]
- matchQuestionLengthArray=[]
- matchAnswerLengthArray=[]
-
+  matchQuestionLengthArray=[]
+  matchAnswerLengthArray=[]
+  token:String
 
 
   ngOnInit() {
+    if(!JSON.parse(localStorage.getItem('token'))){
+      window.location.href="/login"
+     }
+  
+    this.token=JSON.parse(localStorage.getItem('token'))
     this.route.params.subscribe(params => { this.id = params.id });
     this.getQuestionDetails(this.id)
     this.getDetails();
     this.createForm();
     this.bestchoice= ['','','',''];
+  
   }
  
 
@@ -267,7 +273,7 @@ export class EditQuestionComponent implements OnInit {
         break;
     }
     console.log(questionPayload)
-      this.questionService.updateQuestion(questionPayload).then((res: any) => {
+      this.questionService.updateQuestion(questionPayload,this.token).then((res: any) => {
         this.updateQuestionSuccessMessageFlag=true
         window.location.reload()
       }).catch(
@@ -283,17 +289,17 @@ export class EditQuestionComponent implements OnInit {
     this.getLevels();
   }
   getLevels() {
-    this.questionService.getLevels().then((res: any) => {
+    this.questionService.getLevels(this.token).then((res: any) => {
       this.Levels = res.data;
     })
   }
   getTypes() {
-    this.questionService.getTypes().then((res: any) => {
+    this.questionService.getTypes(this.token).then((res: any) => {
       this.Types = res.data;
     })
   }
   getCategories() {
-    this.questionService.getCategories().then((res: any) => {
+    this.questionService.getCategories(this.token).then((res: any) => {
       this.Categories = res.data;
     })
   }
@@ -396,7 +402,7 @@ export class EditQuestionComponent implements OnInit {
       }
     }
       if(this.typeValue=='5'){
-        this.questionService.getMatchDetails(id).then((res:any)=>{
+        this.questionService.getMatchDetails(id,this.token).then((res:any)=>{
          // console.log(res.data)
           this.matchDetails=res.data
           for(let i =0;i<this.matchDetails.length;i++){
@@ -429,7 +435,7 @@ export class EditQuestionComponent implements OnInit {
        
       }
       if(this.typeValue=='1'){
-        this.questionService.getBestChoiceDetails(id).then((res:any)=>{
+        this.questionService.getBestChoiceDetails(id,this.token).then((res:any)=>{
           console.log(res.data)
           this.bestChoiceDetails=res.data
           console.log(this.bestChoiceDetails[0].is_yes)
@@ -475,7 +481,7 @@ export class EditQuestionComponent implements OnInit {
     
 
       if(this.typeValue=='3'){
-        this.questionService.getMultipleChoiceDetails(id).then((res:any)=>{
+        this.questionService.getMultipleChoiceDetails(id,this.token).then((res:any)=>{
           console.log(res.data)
           this.bestChoiceDetails=res.data
          // console.log(this.bestChoiceDetails[0].is_yes)

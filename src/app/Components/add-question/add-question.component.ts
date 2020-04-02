@@ -34,12 +34,17 @@ export class AddQuestionComponent implements OnInit {
   isYes=[];
   isYesIndex=[];
   yesIndexValue:number;
- createQuestionSuccessMessageFlag:boolean=false;
- createQuestionFailureMessageFlag:boolean=false;
-
+  createQuestionSuccessMessageFlag:boolean=false;
+  createQuestionFailureMessageFlag:boolean=false;
+  token:String
 
 
   ngOnInit() {
+    if(!JSON.parse(localStorage.getItem('token'))){
+      window.location.href="/login"
+     }
+  
+    this.token=JSON.parse(localStorage.getItem('token'));
     this.getDetails();
     this.createForm();
     this.bestchoice= ['','','',''];
@@ -251,7 +256,7 @@ export class AddQuestionComponent implements OnInit {
     //console.log(this.stickyArray)
     //console.log(this.option)
     console.log(questionPayload)
-  this.questionService.addQuestion(questionPayload).then((res: any) =>{
+  this.questionService.addQuestion(questionPayload,this.token).then((res: any) =>{
     this.createQuestionSuccessMessageFlag=true;
     window.location.reload()
   }).catch(
@@ -266,18 +271,18 @@ export class AddQuestionComponent implements OnInit {
     this.getLevels();
   }
   getLevels() {
-    this.questionService.getLevels().then((res: any) => {
+    this.questionService.getLevels(this.token).then((res: any) => {
       this.Levels = res.data;
     })
   }
  
   getTypes() {
-    this.questionService.getTypes().then((res: any) => {
+    this.questionService.getTypes(this.token).then((res: any) => {
       this.Types = res.data;
     })
   }
   getCategories() {
-    this.questionService.getCategories().then((res: any) => {
+    this.questionService.getCategories(this.token).then((res: any) => {
       this.Categories = res.data;
     })
   }

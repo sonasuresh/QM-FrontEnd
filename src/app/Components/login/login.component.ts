@@ -16,6 +16,7 @@ export class LoginComponent implements OnInit {
 
 
   ngOnInit() {
+    localStorage.clear();
     this.createForm()
   }
   createForm(){
@@ -24,9 +25,11 @@ export class LoginComponent implements OnInit {
       password: ['', Validators.required]
     });
   }
-  
+
   login(){
     this.userService.login(this.loginForm.value).then((res:any)=>{
+      const token= res.data.jwt;
+      localStorage.setItem('token', JSON.stringify(token));
         this.router.navigate(['']) 
 }).catch((e)=>{
   alert("Invalid Credentials")

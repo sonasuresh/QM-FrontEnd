@@ -8,6 +8,7 @@ import { UpdateQuestionsComponent } from './Components/update-questions/update-q
 import { LoginComponent } from './Components/login/login.component';
 import { NewUserComponent } from './Components/new-user/new-user.component';
 import { EditQuestionComponent } from './Components/edit-question/edit-question.component';
+import { InviteUserComponent } from './Components/invite-user/invite-user.component';
 
 
 const routes: Routes = [
@@ -19,6 +20,8 @@ const routes: Routes = [
   {path:'login',component:LoginComponent},
   {path:'newuser',component:NewUserComponent},
   {path:'edit/:id',component:EditQuestionComponent},
+  {path:'invite',component:InviteUserComponent}
+
 
 ];
 
