@@ -93,11 +93,14 @@ export class QuestionServiceService {
     }
     return axios.put("http://localhost:9004/questions/updatestatus",body,{headers:headers});
   }
-  getQuestionDetails(id:any){
+  getQuestionDetails(id:any,auth_token){
     const params = {
       id: id,
     }
-    return axios.get("http://localhost:9004/questions/", { params }) 
+    const headers={
+      'Authorization': 'Bearer ' +auth_token
+    }
+    return axios.get("http://localhost:9004/questions/", { params,headers:headers}) 
   }
   addQuestion(questionPayload:any,auth_token){
     const data={

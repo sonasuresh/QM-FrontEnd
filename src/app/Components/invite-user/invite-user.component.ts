@@ -13,7 +13,9 @@ export class InviteUserComponent implements OnInit {
   token:String
   roles: Array<any> = []
   roleId:any=[]
-
+  jwttoken:String
+  SuccessMessageFlag:boolean=false;
+  FailureMessageFlag:boolean=false;
 
   constructor(private userService:UserServiceService,private formBuilder: FormBuilder) { }
 
@@ -46,12 +48,22 @@ export class InviteUserComponent implements OnInit {
     
    console.log(this.userForm.value)
    this.userService.addUser(this.userForm.value,this.token).then((res:any)=>{
-    this.userService.sendInvite(this.userForm.value,this.token).then((res:any)=>{
-     
-      alert('Invitation Sent Successfully..!')
+     const login={
+       name:res.data.username,
+       password:res.data.password
+     }
+      this.userService.login(login).then((res:any)=>{
+       this.jwttoken=res.data.jwt
+        // console.log(res.data)
+    this.userService.sendInvite(this.userForm.value,this.token,this.jwttoken).then((res:any)=>{
+      this.SuccessMessageFlag=true;
+      window.location.reload();
     }).catch((e)=>{
-      alert('Error Occurred...!Try Again')
+      this.FailureMessageFlag=true;
+
     }) 
+      })
+    
   })
    
    }

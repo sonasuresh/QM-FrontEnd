@@ -9,6 +9,7 @@ import { LoginComponent } from './Components/login/login.component';
 import { NewUserComponent } from './Components/new-user/new-user.component';
 import { EditQuestionComponent } from './Components/edit-question/edit-question.component';
 import { InviteUserComponent } from './Components/invite-user/invite-user.component';
+import { ProfileComponent } from './Components/profile/profile.component';
 
 
 const routes: Routes = [
@@ -20,9 +21,8 @@ const routes: Routes = [
   {path:'login',component:LoginComponent},
   {path:'newuser',component:NewUserComponent},
   {path:'edit/:id',component:EditQuestionComponent},
-  {path:'invite',component:InviteUserComponent}
-
-
+  {path:'invite',component:InviteUserComponent},
+  {path:'profile',component:ProfileComponent}
 ];
 
 @NgModule({

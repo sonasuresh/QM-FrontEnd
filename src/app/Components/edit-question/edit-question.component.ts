@@ -355,7 +355,7 @@ export class EditQuestionComponent implements OnInit {
     this.MatchAnswerrangeArray.splice(row,1)
   }
   getQuestionDetails(id: any) {
-    this.questionService.getQuestionDetails(id).then((res: any) => {
+    this.questionService.getQuestionDetails(id,this.token).then((res: any) => {
       this.questionDetails = res.data
       this.option = (JSON.parse(this.questionDetails.option))
       this.typeValue = this.questionDetails.type_Id.id

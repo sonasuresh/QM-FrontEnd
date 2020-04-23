@@ -142,7 +142,7 @@ export class DeactiveQuestionsComponent implements OnInit {
     }
   }
   getDetails(id:any){
-    this.questionService.getQuestionDetails(id).then((res: any) => {
+    this.questionService.getQuestionDetails(id,this.token).then((res: any) => {
       this.questionDetails=res.data
       this.option=(JSON.parse(this.questionDetails.option))
       var type_id = this.questionDetails.type_Id.id

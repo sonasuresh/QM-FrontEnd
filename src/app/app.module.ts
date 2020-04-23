@@ -20,6 +20,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations'; 
 
 import { NgxTagsInputModule } from 'ngx-tags-input';
 import { InviteUserComponent } from './Components/invite-user/invite-user.component';
+import { ProfileComponent } from './Components/profile/profile.component';
 
 //import { TimeValueAccessorModule } from "ng-time-value-accessor";
 
@@ -36,6 +37,7 @@ import { InviteUserComponent } from './Components/invite-user/invite-user.compon
     NewUserComponent,
     EditQuestionComponent,
     InviteUserComponent,
+    ProfileComponent,
     //TimeValueAccessorModule
   ],
   imports: [

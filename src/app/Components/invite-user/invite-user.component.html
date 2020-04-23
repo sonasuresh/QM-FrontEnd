@@ -1,4 +1,12 @@
 <app-navbar></app-navbar>
+<div class="alert alert-info alert-dismissible fade show color" *ngIf="SuccessMessageFlag">
+  <strong >Success!<span aria-expanded="false" class="test">Invitation Sent Successfully..!</span></strong>
+  <button type="button" class="close" data-dismiss="alert">&times;</button>
+  </div>
+  <div class="alert alert-danger alert-dismissible fade show warningcolor" *ngIf="FailureMessageFlag">
+  <strong >Error!<span aria-expanded="false" class="test">'Error Occurred...!Try Again'</span></strong>
+  <button type="button" class="close" data-dismiss="alert">&times;</button>
+  </div>
 <br/><br/>
   <div class="align">
   <form [formGroup]="userForm">

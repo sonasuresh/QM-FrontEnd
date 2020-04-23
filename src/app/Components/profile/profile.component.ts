@@ -4,20 +4,24 @@ import { FormGroup, FormControl, Validators, FormBuilder, FormArray, NgForm } fr
 import { ActivatedRoute } from '@angular/router';
 
 @Component({
-  selector: 'app-new-user',
-  templateUrl: './new-user.component.html',
-  styleUrls: ['./new-user.component.css']
+  selector: 'app-profile',
+  templateUrl: './profile.component.html',
+  styleUrls: ['./profile.component.css']
 })
-export class NewUserComponent implements OnInit {
+export class ProfileComponent implements OnInit {
+
   userForm: FormGroup;
   SuccessMessageFlag:boolean=false;
   FailureMessageFlag:boolean=false;
-  
+  token:String
   constructor(private userService:UserServiceService,private formBuilder: FormBuilder,private route:ActivatedRoute) { }
 
   ngOnInit() {
-
-      
+    if(!JSON.parse(localStorage.getItem('token'))){
+      window.location.href="/login"
+     }
+    
+    this.token=JSON.parse(localStorage.getItem('token'))
     this.createForm()
   }
   createForm(){
@@ -40,6 +44,5 @@ export class NewUserComponent implements OnInit {
     }).catch((e)=>{
       this.FailureMessageFlag=true;
     })
-   }
-
+  }
 }

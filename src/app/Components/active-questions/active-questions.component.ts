@@ -29,16 +29,18 @@ export class ActiveQuestionsComponent implements OnInit {
  deleteSuccessMessageFlag:boolean=false;
  deleteFailureMessageFlag:boolean=false;
  token:String
-  constructor(private questionService:QuestionServiceService,private router:Router) { }
+  constructor(private questionService:QuestionServiceService,private router:Router) {
+    if(!JSON.parse(localStorage.getItem('token'))){
+      window.location.href="/login"
+     }
+   }
   masterSelected:boolean;
   checklist:any;
   checkedList:number[];
   id:number[];
   pageNo:number=0;
   ngOnInit() {
-  if(!JSON.parse(localStorage.getItem('token'))){
-   window.location.href="/login"
-  }
+  
   this.token=JSON.parse(localStorage.getItem('token'))
     this.getActivatedQuestions();
   }
@@ -123,7 +125,7 @@ export class ActiveQuestionsComponent implements OnInit {
     this.router.navigate(['/edit/'+id])
   }
   getDetails(id:any){
-    this.questionService.getQuestionDetails(id).then((res: any) => {
+    this.questionService.getQuestionDetails(id,this.token).then((res: any) => {
       this.questionDetails=res.data
       this.option=(JSON.parse(this.questionDetails.option))
     var type_id = this.questionDetails.type_Id.id

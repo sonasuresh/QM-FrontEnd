@@ -1,6 +1,3 @@
-
-
-
 <app-navbar></app-navbar>
 <div>
 <!-- <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
@@ -47,21 +44,21 @@
       <div class="form-group row">
         <label for="colFormLabel" class="col-sm-2 col-form-label">Question Title</label>
         <div class="col-sm-10">
-          <input type="text" class="form-control" id="title" formControlName="title" placeholder="What is Java?">
+          <input type="text" class="form-control" id="title" formControlName="title" placeholder="What is Java?" required>
         </div>
       </div>
       <div class="form-group row">
         <label for="colFormLabel" class="col-sm-2 col-form-label">Question Content</label>
         <div class="col-sm-10">
           <!-- <angular-editor formControlName="content" rows="4" ></angular-editor> -->
-          <textarea class="form-control" id="content" formControlName="content" rows="3"></textarea>
+          <textarea class="form-control" id="content" formControlName="content" rows="3" required></textarea>
         </div>
       </div>
       <div class="form-group row">
         <label for="colFormLabel" class="col-sm-2 col-form-label">Question Category</label>
         <div class="col-sm-10">
           <div class="btn-group">
-            <select class="btn btn-light dropdown-toggle border border-dark" formControlName="category">
+            <select class="btn btn-light dropdown-toggle border border-dark" formControlName="category" required>
               <option value="" disabled selected>Select</option>
               <option *ngFor="let category of Categories" [value]="category.id">{{category.name}}</option>
             </select>
@@ -84,7 +81,7 @@
         <label for="colFormLabel" class="col-sm-2 col-form-label">Levels</label>
         <div class="col-sm-10">
           <div class="btn-group">
-            <select class="btn btn-light dropdown-toggle border border-dark" formControlName="levels">
+            <select class="btn btn-light dropdown-toggle border border-dark" formControlName="levels" required>
               <option value="" disabled selected>Select</option>
 
               <option *ngFor="let level of Levels" [value]="level.id">{{level.name}}</option>
@@ -96,21 +93,21 @@
         <label for="colFormLabel" class="col-sm-2 col-form-label">Skill Points</label>
         <div class="col-sm-10">
           <input type="text" class="form-control" pattern="[0-9]{10}" formControlName="points" id="points"
-            placeholder="10">
+            placeholder="10" required>
         </div>
       </div>
       <div class="form-group row">
         <label for="colFormLabel" class="col-sm-2 col-form-label">Duration</label>
 
         <div class="col-sm-10">
-          <input type="time" id="duration" formControlName="duration" placeholder="0h 02m 00s" step="1">
+          <input type="time" id="duration" formControlName="duration" placeholder="0h 02m 00s" step="1" required>
         </div>
       </div>
       <div class="form-group row">
         <label for="colFormLabel" class="col-sm-2 col-form-label">Score</label>
         <div class="col-sm-10">
           <input type="text" class="form-control" pattern="^[0-9].[0-9]$" formControlName="score" id="score"
-            placeholder="1.0">
+            placeholder="1.0" required>
         </div>
       </div>
 

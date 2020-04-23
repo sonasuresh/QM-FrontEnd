@@ -17,6 +17,19 @@ export class UserServiceService {
     }
     return axios.post("http://localhost:9004/users/add", data,{headers:headers})
   }
+  addUserDetails(userDetails:any,email:String,auth_token){
+    const data={
+      email:email,
+      name:userDetails.name,
+      password:userDetails.password
+    }
+    const headers={
+      'Authorization': 'Bearer ' +auth_token
+    }
+    console.log(data,headers)
+   // return null;
+   return axios.put("http://localhost:9004/users/edit",data,{headers:headers})
+  }
   login(userDetails:any){
     const data={
       username:userDetails.name,
@@ -25,14 +38,14 @@ export class UserServiceService {
     return axios.post("http://localhost:9004/authenticate", data)
 
   }
-  sendInvite(userDetails:any,auth_token){
+  sendInvite(userDetails:any,auth_token,jwt:String){
     const headers={
       'Authorization': 'Bearer ' +auth_token
     } 
     const data={
       to_address:userDetails.name,
-	    subject:"Invitation to Sign In..!",
-    	body:"http://localhost:4200/newuser"
+	    subject:"Invitation to Sign Up..!QUESTIONS MODULE!",
+    	body:"Sign Up with the provided link: " +" "+ "http://localhost:4200/newuser?token="+jwt +"&email="+userDetails.name
     }
   //   const data1={
   //     email:userDetails.name,
